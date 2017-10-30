@@ -1,0 +1,98 @@
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class GFG {
+    class TrieNode{
+        TrieNode arr[] = new TrieNode[26];
+        int val;
+    }
+    TrieNode root = new TrieNode();
+    void insert(String str)
+    {
+        int i,x;
+        TrieNode p = root;
+        for(i=0; i < str.length();i++)
+        {
+            x = str.charAt(i)-'a';
+            if(p.arr[x] == null)
+                p.arr[x] = new TrieNode();
+            p = p.arr[x];
+        }
+        p.val = 1;
+    }
+    void search(String str)
+    {
+        int i,x;
+        TrieNode p = root;
+        for(i=0; i < str.length();i++)
+        {
+            x = str.charAt(i)-'a';
+            if(p.arr[x] == null)
+            {
+                while(i<str.length())
+                {
+                    System.out.println("0");
+                    i++;
+                }
+                return;
+            }
+            p = p.arr[x];
+            startWith(str,i);
+        }
+    }
+    void startWith(String str, int n)
+    {
+        int i,x;
+        TrieNode p = root;
+        String s= new String();
+        for(i = 0; i <= n; i++)
+        {
+            x = str.charAt(i)-'a';
+            s = s+((char)(x+'a'));
+            if(p.arr[x] == null)
+                return;
+            p = p.arr[x];
+        }
+        s = s + print(p,s);
+        System.out.println(s);
+    }
+    String print(TrieNode root,String str)
+    {
+        int i;
+        String s=new String();
+        if(root.val == 1)
+            s = s + " ";
+            
+        for(i=0; i < 26;i++)
+        {
+            if(root.arr[i] != null)
+            {
+                if(s.length()!=0 &&s.charAt(s.length()-1) == 32)
+                    s =s +  str;
+                s = s  +((char)(i+'a')) ;
+                s = s + print(root.arr[i],str+(char)(i+'a'));
+            }
+        }
+        return s;
+    }
+	public static void main (String[] args) {
+	    Scanner s = new Scanner(System.in);
+	    int t = s.nextInt();
+	    while(t!=0)
+	    {
+	        GFG g = new GFG();
+	        int n = s.nextInt();
+	        String str ;
+	        while(n!=0)
+	        {
+	            str = s.next();
+	            g.insert(str);
+	            n--;
+	        }
+	        str = s.next();
+	        g.search(str);
+	        t--;
+	    }
+	}
+}
